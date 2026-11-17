@@ -1,0 +1,24 @@
+<?php
+/** LISTA BLANCA DE RUTAS: solo las URLs registradas aquí son accesibles */
+
+use Controllers\AuthController;
+use Controllers\PeliculaController;
+use Controllers\UserController;
+use Core\Router;
+use Middlewares\AuthMiddleware;
+
+// Raíz: lleva al catálogo (que será privado)
+Router::add('get', '/', function () {
+    redirect('peliculas');
+});
+
+// Públicas
+Router::add('get',  'login',  [AuthController::class, 'showLogin']);
+Router::add('post', 'login',  [AuthController::class, 'login']);
+Router::add('get',  'logout', [AuthController::class, 'logout']);
+
+// Privadas (solo autenticados)
+// Etapa 3: la protección está centralizada en el middleware
+Router::add('get', 'perfil',         AuthMiddleware::proteger([UserController::class,     'perfil']));
+Router::add('get', 'peliculas',      AuthMiddleware::proteger([PeliculaController::class, 'index']));
+Router::add('get', 'peliculas/mias', AuthMiddleware::proteger([PeliculaController::class, 'mias']));
