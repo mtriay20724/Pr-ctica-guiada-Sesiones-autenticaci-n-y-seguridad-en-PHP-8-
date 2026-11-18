@@ -16,8 +16,7 @@ use Core\Session;
 // La sesión se inicia UNA sola vez por petición, antes de cualquier salida.
 Session::iniciar();
 
-// Etapa 6: caduca la sesión si lleva demasiado tiempo inactiva
-Session::comprobarCaducidad();
+// Etapa 6: aquí se llamará a Session::comprobarCaducidad();
 
 // Evalúa la URL recibida y ejecuta la función/controlador asociado
 Router::dispatch();

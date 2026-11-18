@@ -105,43 +105,18 @@ final class Session
     // ---------- Etapa 5: mensajes flash ----------
     public static function setFlash(string $clave, string $mensaje): void
     {
-        $_SESSION['_flash'][$clave] = $mensaje;
+        // TODO (Etapa 5)
     }
 
     public static function getFlash(string $clave): ?string
     {
-        $mensaje = $_SESSION['_flash'][$clave] ?? null;
-        unset($_SESSION['_flash'][$clave]);   // se lee una sola vez
-
-        if (empty($_SESSION['_flash'])) {
-            unset($_SESSION['_flash']);
-        }
-
-        return $mensaje;
+        // TODO (Etapa 5)
+        return null;
     }
 
     // ---------- Etapa 6: caducidad por inactividad ----------
     public static function comprobarCaducidad(): void
     {
-        // Solo afecta a usuarios autenticados
-        if (!self::has('user_id')) {
-            return;
-        }
-
-        $ultima = (int) self::get('ultima_actividad', time());
-
-        if (time() - $ultima > self::INACTIVIDAD_MAX) {
-            // 1) Destruir la sesión caducada (datos, cookie y fichero)
-            self::destruir();
-            // 2) Abrir una sesión nueva y vacía: sin ella no hay dónde guardar el flash
-            self::iniciar();
-            // 3) Avisar al usuario
-            self::setFlash('error', 'Tu sesión ha caducado por inactividad');
-            // 4) Llevarlo al login
-            redirect('login');
-        }
-
-        // Sigue activo: se renueva la marca de tiempo
-        self::set('ultima_actividad', time());
+        // TODO (Etapa 6)
     }
 }

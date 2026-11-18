@@ -18,7 +18,6 @@ final class AuthController
     // correos están registrados midiendo tiempos).
     private const HASH_FALSO = '$2y$10$X.sLvISy80uyYlgByzTVMuTd8YBgB9AvhD8JlQGkZIP1fYuSW.uHy';
 
-    // Etapa 5: se leen los flash y se pasan a la vista (la vista no accede a Session).
     public function showLogin(): void
     {
         // Si ya hay sesión abierta, no tiene sentido volver a identificarse
@@ -26,10 +25,7 @@ final class AuthController
             redirect('perfil');
         }
 
-        (new Pages())->render('auth/login', [
-            'error' => Session::getFlash('error'),
-            'info'  => Session::getFlash('info'),
-        ]);
+        (new Pages())->render('auth/login');
     }
 
     public function login(): void
@@ -44,8 +40,7 @@ final class AuthController
         $valido = password_verify($password, $hash) && $usuario !== null;
 
         if (!$valido) {
-            // Mismo mensaje si el correo no existe o si la contraseña es incorrecta
-            Session::setFlash('error', 'Correo o contraseña incorrectos');
+            // De momento sin mensaje (los avisos se añaden en la etapa 5)
             redirect('login');
         }
 
@@ -53,7 +48,6 @@ final class AuthController
         Session::regenerar();
 
         Session::set('user_id', $usuario['id']);
-        Session::set('ultima_actividad', time());
 
         redirect('perfil');
     }
@@ -61,10 +55,6 @@ final class AuthController
     public function logout(): void
     {
         Session::destruir();
-
-        // Para dejar un flash hace falta una sesión (nueva y vacía)
-        Session::iniciar();
-        Session::setFlash('info', 'Has cerrado sesión correctamente');
 
         redirect('login');
     }

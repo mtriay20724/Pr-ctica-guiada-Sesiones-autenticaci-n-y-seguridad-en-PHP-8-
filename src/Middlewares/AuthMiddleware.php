@@ -21,7 +21,6 @@ final class AuthMiddleware
     public function handle(): void
     {
         if (!Session::has('user_id')) {
-            Session::setFlash('error', 'Debes iniciar sesión para ver esta página');
             redirect('login');   // incluye exit: el controlador no llega a ejecutarse
         }
     }
